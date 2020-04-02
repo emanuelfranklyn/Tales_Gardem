@@ -38,7 +38,13 @@ module.exports = {
             const guild = msg.guild.id
             const Data = dt.GuildsCacheGetData(guild, DataName)
             if (Data.queue[0]) {
-                console.log(Data.queue[0].url)
+                const embed = new RichEmbed()
+                    .setTitle('tocando agora: '+Data.queue[0].title)
+                    .setColor(0x00FF00)
+                    .setThumbnail("https://i.pinimg.com/originals/d0/4e/9b/d04e9bdab4a54e488557ebdfecde5850.png")
+                    .setDescription("A música `"+Data.queue[0].title+"` requisitada por: `"+Data.requesters[0]+"` na data: `"+Data.dates[0]+"` vai ser tocada agora!");
+                msg.channel.send(embed)
+                //console.log(Data.queue[0].url)
                 //console.log(Data.queue.url[0])
                 const dispatcher = connection.playStream(ytdl(Data.queue[0].url))
                 dispatcher.setVolume(1)
@@ -47,15 +53,19 @@ module.exports = {
                     Data.requesters.shift()
                     Data.dates.shift()
                     dt.GuildsCacheAddData(guild,DataName, Data)
+                    
                     await play()
                 }).on("error", e => {
                     console.log(e)
                 })
-                if (!Data.queue[0].url) {
-                    //show the playlist has been stopped
-                }
             } else {
                 //send a message sayng the playlist have none music
+                const embed = new RichEmbed()
+                    .setTitle('Sem musicas')
+                    .setColor(0xfcba03)
+                    .setThumbnail("https://images.vexels.com/media/users/3/132346/isolated/preview/afcacb3f2a1c518ca5400088f66e7b2d-stop-flat-media-icon-by-vexels.png")
+                    .setDescription("A playlist de músicas terminou, adicione mais músicas e chame o comando novamente!");
+            return msg.channel.send(embed)
             }
         }
         await play()
