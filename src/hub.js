@@ -1,5 +1,5 @@
 const path = require('path');
-const { RichEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 const Similar = require('string-similarity')
 const Configs = require('../Configs');
 const GetData = require('./Controllers/GetData');
@@ -18,7 +18,7 @@ module.exports = {
             if (Commands.find(element => element == args[0])) {
                 var TheCommand = require('./Commands/'+args[0]);
                 await TheCommand.Main(Client, msg, args).catch(() => {
-                    const embed = new RichEmbed()
+                    const embed = new MessageEmbed()
                         .setTitle('Ocorreu um erro inesperado!')
                         .setColor(0xFF0000)
                         .setThumbnail("https://media.tenor.com/images/71656fc182ad63d50fbcd7c5496aa09d/tenor.gif")
@@ -29,7 +29,7 @@ module.exports = {
             } else {
                 var GetBest = Similar.findBestMatch(args[0], Commands)
                 if (GetBest.bestMatch.rating > 0.2) {
-                    const embed = new RichEmbed()
+                    const embed = new MessageEmbed()
                         .setTitle('Não encontrado: '+args[0])
                         .setColor(0xFFFFFF)
                         .setThumbnail("https://iabs.org.br/wp-content/uploads/2015/08/404-animation-1.gif")
@@ -46,10 +46,10 @@ module.exports = {
 
                         collector.on('collect', async (reaction, reactionCollector) => {
 	                        if (reaction.emoji.name == "✅") {
-                                message.delete(500)
+                                message.delete()
                                 var TheCommand = require('./Commands/'+GetBest.bestMatch.target);
                                 await TheCommand.Main(Client, msg, args).catch(() => {
-                                    const embed = new RichEmbed()
+                                    const embed = new MessageEmbed()
                                         .setTitle('Ocorreu um erro inesperado!')
                                         .setColor(0xFF0000)
                                         .setThumbnail("https://media.tenor.com/images/71656fc182ad63d50fbcd7c5496aa09d/tenor.gif")
@@ -57,7 +57,7 @@ module.exports = {
                                     msg.channel.send(embed)
                                 });
                             } else if (reaction.emoji.name == "❌") {
-                                message.clearReactions()
+                                message.reactions.removeAll()
                             }
                         });
                         
@@ -65,7 +65,7 @@ module.exports = {
                         msg.channel.send("ERROR")
                     });
                 } else {
-                    const embed = new RichEmbed()
+                    const embed = new MessageEmbed()
                         .setTitle('Não encontrado: '+args[0])
                         .setColor(0xFFAAAA)
                         .setThumbnail("https://iabs.org.br/wp-content/uploads/2015/08/404-animation-1.gif")
@@ -79,7 +79,7 @@ module.exports = {
                 var GetAboutCommand = require('./Commands/'+message);
                 if (GetAboutCommand.NeedArguments === false) {
                         await GetAboutCommand.Main(Client, msg, message).catch(() => {
-                            const embed = new RichEmbed()
+                            const embed = new MessageEmbed()
                                 .setTitle('Ocorreu um erro inesperado!')
                                 .setColor(0xFF0000)
                                 .setThumbnail("https://media.tenor.com/images/71656fc182ad63d50fbcd7c5496aa09d/tenor.gif")
@@ -87,7 +87,7 @@ module.exports = {
                             msg.channel.send(embed)
                         });
                 } else {
-                    const embed = new RichEmbed()
+                    const embed = new MessageEmbed()
                         .setTitle('Sobre o comando: '+message)
                         .setColor(0x222222)
                         .setDescription('Sobre: `'+GetAboutCommand.Help+"`\n"+"Como usar: `"+Configs.Prefix+GetAboutCommand.Usage+'`');
@@ -96,7 +96,7 @@ module.exports = {
             } else {
                 var GetBest = Similar.findBestMatch(message, Commands)
                 if (GetBest.bestMatch.rating > 0.2) {
-                    const embed = new RichEmbed()
+                    const embed = new MessageEmbed()
                         .setTitle('Não encontrado: '+message)
                         .setColor(0xFFFFFF)
                         .setThumbnail("https://iabs.org.br/wp-content/uploads/2015/08/404-animation-1.gif")
@@ -113,11 +113,11 @@ module.exports = {
 
                         collector.on('collect', async (reaction, reactionCollector) => {
 	                        if (reaction.emoji.name == "✅") {
-                                message.delete(500)
+                                message.delete()
                                 var GetAboutCommand = require('./Commands/'+GetBest.bestMatch.target);
                                 if (GetAboutCommand.NeedArguments == false) {
                                     await GetAboutCommand.Main(Client, msg, message).catch(() => {
-                                        const embed = new RichEmbed()
+                                        const embed = new MessageEmbed()
                                             .setTitle('Ocorreu um erro inesperado!')
                                             .setColor(0xFF0000)
                                             .setThumbnail("https://media.tenor.com/images/71656fc182ad63d50fbcd7c5496aa09d/tenor.gif")
@@ -125,14 +125,14 @@ module.exports = {
                                         msg.channel.send(embed)
                                     });
                                 } else {
-                                    const embed = new RichEmbed()
+                                    const embed = new MessageEmbed()
                                         .setTitle('Sobre o comando: '+message)
                                         .setColor(0x222222)
                                         .setDescription('Sobre: `'+GetAboutCommand.Help+"`\n"+"Como usar: `"+Configs.Prefix+GetAboutCommand.Usage+'`');
                                     msg.channel.send(embed);
                                 }
                             } else if (reaction.emoji.name == "❌") {
-                                message.clearReactions()
+                                message.reactions.removeAll()
                             }
                         });
                         
@@ -141,14 +141,14 @@ module.exports = {
                     });
                 } else {
                     if (message === "") {
-                        const embed = new RichEmbed()
+                        const embed = new MessageEmbed()
                             .setTitle('Nenhum comando digitado')
                             .setColor(0xFFAAAA)
                             .setThumbnail("https://iabs.org.br/wp-content/uploads/2015/08/404-animation-1.gif")
                             .setDescription('Não foi digitado nenhum comando, use `'+Configs.Prefix+Configs.CommandsCommand+'` para obter a lista de comandos.');
                         msg.channel.send(embed);
                     } else {
-                        const embed = new RichEmbed()
+                        const embed = new MessageEmbed()
                             .setTitle('Não encontrado: '+message)
                             .setColor(0xFFAAAA)
                             .setThumbnail("https://iabs.org.br/wp-content/uploads/2015/08/404-animation-1.gif")
