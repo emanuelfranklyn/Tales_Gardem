@@ -10,10 +10,13 @@ client.on('ready', () => {
   DisHel.Log(client,`${client.user.tag} inicialisado e operando!`);
 });
 client.on('message', async msg => {
-  var message = msg.toString().toLowerCase().slice(2, msg.toString().length);
+  var message = msg.toString().slice(2, msg.toString().length);
+  var args = message.split(' ')
+  args[0] = args[0].toLowerCase()
+  message = args.join(' ')
   if (msg.toString().toLowerCase().slice(0,2) === Configs.Prefix) {
     //Have the prefix the user want to do some thing!
-    var Waiting = msg.channel.send(client.emojis.find(emoji => emoji.name === "TalesGardemSpaceIntLoadingGif1")+"")
+    var Waiting = msg.channel.send(`${client.emojis.cache.find(emoji => emoji.name === "TalesGardemSpaceIntLoadingGif1")}`)
     await Hub.ResolveCommand(client, msg, message).then(() => {
       Promise.resolve(Waiting).then(function(value) {
         value.delete()
