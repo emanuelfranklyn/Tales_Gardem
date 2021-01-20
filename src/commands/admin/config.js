@@ -10,14 +10,13 @@ function loader() {
     // Client = global.TalesGardem.Discord.Client;
 }
 
-// Msg, args, language, [...]
 const configs = {
     topics: [{
         name: 'language',
         properties: [{
             name: 'set',
             needArguments: true,
-            run: (Msg, args) => {
+            run: (Msg, _, args) => {
                 return Database.Add('Guild' + Msg.guild.id, 'Language', args[2]);
             },
             fallback: async (Msg, language) => {
@@ -85,12 +84,12 @@ module.exports = {
                         .setTitle(language.Message.sucessfullRunnedCommand)
                         .setDescription(language.Message.sucessfullRunnedCommandLong);
                     if (args[2] && typeof args[2] === 'string' && prop.needArguments) {
-                        prop.run(Msg, args).catch(e => {reject(e);});
+                        prop.run(Msg, language, args).catch(e => {reject(e);});
                         Msg.channel.send(WorkedMessage);
                         resolved = true;
                         resolve();
                     } else if (!prop.needArguments) {
-                        prop.run(Msg).catch(e => {reject(e);});
+                        prop.run(Msg, language).catch(e => {reject(e);});
                         Msg.channel.send(WorkedMessage);
                         resolved = true;
                         resolve();
