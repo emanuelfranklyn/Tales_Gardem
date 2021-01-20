@@ -1,0 +1,30 @@
+{
+  "name": "talesgardemdiscord",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emanuelfranklyn/Tales_Gardem.git"
+  },
+  "keywords": [
+    "TalesGardem"
+  ],
+  "author": "Space_Interprise",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emanuelfranklyn/Tales_Gardem/issues"
+  },
+  "homepage": "https://github.com/emanuelfranklyn/Tales_Gardem#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "mysql.js": "git+https://github.com/emanuelfranklyn/MySQL.JS.git"
+  },
+  "devDependencies": {
+    "eslint": "^7.16.0",
+    "prettier": "^2.2.1"
+  }
+}
