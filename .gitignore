@@ -2,4 +2,3 @@ Configs.json
 node_modules/*
 *.yaml
 yarn.lock
-package-lock.json
