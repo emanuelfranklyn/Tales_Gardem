@@ -1,20 +1,18 @@
-const Configs = global.TalesGardem.Discord.Configs;
 const { MessageEmbed } = require('discord.js');
 const path = require('path');
+var Configs;
 var Commands;
 
-function loader() {
-    // const Client = global.TalesGardem.Discord.Client;
-    Commands = global.TalesGardem.Discord.Commands;
-}
-
-module.exports = {
-    Desc: 'Shows info about a command and how to use it',
-    Usage: 'help [CommandName]',
-    NeedArguments: true,
-    Main: (Msg, language, args) => {
+class help {
+    constructor(Data) {
+        Commands = Data.Commands;
+        Configs = Data.Configs;
+        this.Desc = 'Shows info about a command and how to use it';
+        this.Usage = 'help [CommandName]';
+        this.NeedArguments = true;
+    }
+    Main(Msg, language, args) {
         return new Promise((resolve) => {
-            loader();
             var description = '```css\n';
             var CommandData;
             var FoundedCommand = false;
@@ -50,4 +48,6 @@ module.exports = {
             resolve();
         });
     }
-};
+}
+
+module.exports = help;

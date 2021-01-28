@@ -1,56 +1,54 @@
-const Configs = global.TalesGardem.Discord.Configs;
 const { ShardParser: Database } = require('mysql.js');
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const Languager = require(path.resolve(__dirname, '..','..','controllers','languages', 'languageParser'));
-// var Client
+var Configs;
+var configs;
 
-function loader() {
-    // Client = global.TalesGardem.Discord.Client;
-}
-
-const configs = {
-    topics: [{
-        name: 'language',
-        properties: [{
-            name: 'set',
-            needArguments: true,
-            run: (Msg, _, args) => {
-                return Database.Add('Guild' + Msg.guild.id, 'Language', args[2]);
-            },
-            fallback: async (Msg, language) => {
-                var AllLangs = [];
-                await fs.readdirSync(path.resolve(__dirname, '..', '..', 'controllers', 'languages')).forEach(async (languages) => {
-                    if (languages.endsWith('.json')) {
-                        var languageFileName = languages.slice(0, languages.length - 5);
-                        AllLangs.push(languageFileName);
+class config {
+    constructor(Data) {
+        Configs = Data.Configs;
+        this.Desc = 'Define the settings of ' + Configs.BotName + ' on the guild';
+        this.Usage = 'config [NameOfCategory [...]] or (Categories)';
+        this.NeedArguments = true;
+        configs = {
+            topics: [{
+                name: 'language',
+                properties: [{
+                    name: 'set',
+                    needArguments: true,
+                    run: (Msg, _, args) => {
+                        return Database.Add('Guild' + Msg.guild.id, 'Language', args[2]);
+                    },
+                    fallback: async (Msg, language) => {
+                        var AllLangs = [];
+                        await fs.readdirSync(path.resolve(__dirname, '..', '..', 'controllers', 'languages')).forEach(async (languages) => {
+                            if (languages.endsWith('.json')) {
+                                var languageFileName = languages.slice(0, languages.length - 5);
+                                AllLangs.push(languageFileName);
+                            }
+                        });
+                        var fallbackEMsg = new MessageEmbed()
+                            .setTitle(language.Message.ListOfTopics + ':')
+                            .setDescription(language.Message.TheTopicsList + ':\n```' + AllLangs.join(',') + '```');
+                        Msg.channel.send(fallbackEMsg);
+                    },
+                }, 
+                {
+                    name: 'reset',
+                    needArguments: false,
+                    run: (Msg) => {
+                        return Database.Add('Guild' + Msg.guild.id, 'Language', Configs.DefaultLang);
                     }
-                });
-                var fallbackEMsg = new MessageEmbed()
-                    .setTitle(language.Message.ListOfTopics + ':')
-                    .setDescription(language.Message.TheTopicsList + ':\n```' + AllLangs.join(',') + '```');
-                Msg.channel.send(fallbackEMsg);
-            },
-        }, 
-        {
-            name: 'reset',
-            needArguments: false,
-            run: (Msg) => {
-                return Database.Add('Guild' + Msg.guild.id, 'Language', Configs.DefaultLang);
-            }
-        }]
-    }],
-};
+                }]
+            }],
+        };
+    }
 
-module.exports = {
-    Desc: 'Define the settings of ' + Configs.BotName + ' on the guild',
-    Usage: 'config [NameOfCategory [...]] or (Categories)',
-    NeedArguments: true,
-    Main: (Msg, language, args) => {
+    Main(Msg, language, args) {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
-            loader();
             var resolved = false;
             await fs.readdirSync(path.resolve(__dirname, '..', '..', 'controllers', 'languages')).forEach(async (languages) => {
                 if (languages.endsWith('.json')) {
@@ -115,4 +113,6 @@ module.exports = {
             }
         });
     }
-};
+}
+
+module.exports = config;

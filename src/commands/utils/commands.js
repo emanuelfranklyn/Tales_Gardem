@@ -2,17 +2,15 @@ const { MessageEmbed } = require('discord.js');
 const path = require('path');
 var Commands;
 
-function loader() {
-    // const Client = global.TalesGardem.Discord.Client;
-    Commands = global.TalesGardem.Discord.Commands;
-}
+class commands {
+    constructor(Data) {
+        Commands = Data.Commands;
+        this.Desc = 'Shows a list with all avaliable commands';
+        this.NeedArguments = false;
+    }
 
-module.exports = {
-    Desc: 'Shows a list with all avaliable commands',
-    NeedArguments: false,
-    Main: (Msg, language) => {
+    Main(Msg, language) {
         return new Promise((resolve) => {
-            loader();
             var description = '```css\n';
             Commands.forEach((Category) => {
                 description += '\n' + language.Categorys[Category.name] + ':\n';
@@ -34,4 +32,6 @@ module.exports = {
             resolve();
         });
     }
-};
+}
+
+module.exports = commands;

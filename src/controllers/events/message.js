@@ -19,12 +19,17 @@ module.exports = async (Message) => {
     });
     if (!MsgStartsWithPrefix) {return;}
     function DBError(e) {
+        console.log(e);
         if (typeof e === 'object') {
             var LoadingMessage = new MessageEmbed()
                 .setImage('attachment://error.gif')
-                .setDescription('**Error message:**\n```js\n' + e.title + '\n```')
                 .attachFiles([path.resolve(__dirname, '..','..','assets','images','error.gif')])
                 .setTitle('Error while running command!');
+            if (!e.title) {
+                LoadingMessage.setDescription('**Error message:**\n```js\n' + e + '\n```');
+            } else {
+                LoadingMessage.setDescription('**Error message:**\n```js\n' + e.title + '\n```');
+            }
             if (e.github) {
                 LoadingMessage.setTitle('Error while running command, please report it to bot creator on github!');
                 // eslint-disable-next-line max-len
