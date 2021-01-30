@@ -14,7 +14,9 @@ const manager = new ShardingManager('./src/main.js', {
     shardArgs: [JSON.stringify(configs)],
 });
 
-DataBase.Connect('localhost', 'root', 'password', 'mysql');
+DataBase.Connect('localhost', 'root', 'password', 'mysql').then(() => {
+    manager.broadcast({MasterResponseId: 2001007, ConnectedWithDatabase: true});    
+});
 
 manager.on('shardCreate', shard => {
     console.log('Shard Created!');

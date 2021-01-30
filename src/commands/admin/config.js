@@ -2,9 +2,11 @@ const { ShardParser: Database } = require('mysql.js');
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
-const Languager = require(path.resolve(__dirname, '..','..','controllers','languages', 'languageParser'));
+const LanguagerClass = require(path.resolve(__dirname, '..','..','controllers','languages', 'languageParser'));
 var Configs;
 var configs;
+var LanguagerClient;
+var Languager;
 
 class config {
     constructor(Data) {
@@ -12,6 +14,8 @@ class config {
         this.Desc = 'Define the settings of ' + Configs.BotName + ' on the guild';
         this.Usage = 'config [NameOfCategory [...]] or (Categories)';
         this.NeedArguments = true;
+        LanguagerClient = new LanguagerClass({Configs: Configs});
+        Languager = LanguagerClient.get;
         configs = {
             topics: [{
                 name: 'language',

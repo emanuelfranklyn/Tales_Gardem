@@ -1,18 +1,30 @@
 const configs = JSON.parse(process.argv[2]);
 
-global.TalesGardem = {
-    Discord: {
-        Configs: configs,
-    },
-};
-
 const path = require('path');
 const fs = require('fs');
 const Discord = require('discord.js');
 const { ShardParser: Database } = require('mysql.js');
 const Client = new Discord.Client();
-global.TalesGardem.Discord.Client = Client;
+var DBConnected = false;
 Database.DefineClient(Client.shard);
+
+Client.shard.send({
+    MasterEval: true,
+    EvalCommand: 'async function run() {return await DataBase.isConnected();} run()',
+    Id: 2001007, 
+});
+
+function messageParser(Content) {
+    if (Content.MasterResponseId === 2001007) {
+        DBConnected = Content.ConnectedWithDatabase;
+        process.removeListener('message', messageParser);
+    }
+}
+process.on('message', messageParser);
+
+function IsDbConnected() {
+    return DBConnected;
+}
 
 const CommandsPath = path.resolve(__dirname, 'commands');
 const commands = [];
@@ -28,6 +40,7 @@ fs.readdirSync(CommandsPath).forEach((Category) => {
         var CommandLoader = new CommandLoaderC({
             Client: Client,
             Configs: configs,
+            DBConnected: IsDbConnected,
         }); 
         var CommandObj = {
             name: Command,
@@ -68,12 +81,31 @@ fs.readdirSync(CommandsPath).forEach((Category) => {
     commands2.push(Categorye);
 });
 
-global.TalesGardem.Discord.Commands = commands2;
+const { message: messageClass, ready: readyClass, guildMemberAdd: guildMemberAddClass } = require('./controllers/events/index');
 
-const { message, ready, guildMemberAdd } = require('./controllers/events/index');
+const ready = new readyClass({
+    Configs: configs,
+    Commands: commands2,
+    Client: Client,
+    DBConnected: IsDbConnected,
+});
 
-Client.on('ready', ready);
-Client.on('guildMemberAdd', guildMemberAdd);
-Client.on('message', message);
+const guildMemberAdd = new guildMemberAddClass({
+    Configs: configs,
+    Commands: commands2,
+    Client: Client,
+    DBConnected: IsDbConnected,
+});
+
+const message = new messageClass({
+    Configs: configs,
+    Commands: commands2,
+    Client: Client,
+    DBConnected: IsDbConnected,
+});
+
+Client.on('ready', ready.parser);
+Client.on('guildMemberAdd', guildMemberAdd.parser);
+Client.on('message', message.parser);
 
 Client.login(process.env.DISCORD_TOKEN);

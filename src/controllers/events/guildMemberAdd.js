@@ -1,3 +1,9 @@
-module.exports = () => {
-    console.log('Guild Member Add!');
-};
+class guildMemberAdd {
+    constructor() {
+    }
+    parser() {
+        console.log('Guild Member Add!');
+    }
+}
+
+module.exports = guildMemberAdd;
