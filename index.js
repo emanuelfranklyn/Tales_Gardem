@@ -15,7 +15,9 @@ const manager = new ShardingManager('./src/main.js', {
 });
 
 DataBase.Connect('localhost', 'root', 'password', 'mysql').then(() => {
-    manager.broadcast({MasterResponseId: 2001007, ConnectedWithDatabase: true});    
+    setInterval(() => {
+        manager.broadcast({MasterResponseId: 2001007, ConnectedWithDatabase: true});    
+    }, 15000);
 });
 
 manager.on('shardCreate', shard => {
