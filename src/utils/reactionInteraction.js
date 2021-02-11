@@ -55,9 +55,9 @@ class reactionI {
                         var reactionText = reaction._emoji.name;
 
                         if (reactionText.toString() !== nextPageEmoji.toString()) {
-                            data.reactions.removeAll();
                             this.removeListener('messageReactionAdd', messageReactionHandler);
                             var index = numbers.indexOf(reactionText.toString());
+                            data.delete();
                             resolve(itens[index + (numbers.length * page)]);
 
                         } else {
