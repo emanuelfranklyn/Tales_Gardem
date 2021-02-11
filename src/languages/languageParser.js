@@ -2,8 +2,8 @@ const path = require('path');
 var defaultLang;
 
 class languageParser {
-    constructor(Data) {
-        defaultLang = Data.Configs.defaultLang;
+    constructor(data) {
+        defaultLang = data.configs.defaultLang;
     }
     get(LanguageName) {
         if (!LanguageName || LanguageName === 'undefined') {return require(path.resolve(__dirname, defaultLang + '.json'));}

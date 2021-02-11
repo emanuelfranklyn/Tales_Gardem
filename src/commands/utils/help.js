@@ -1,50 +1,69 @@
 const { MessageEmbed } = require('discord.js');
 const path = require('path');
-var Configs;
-var Commands;
+const fs = require('fs');
+const LanguagerClass = require(path.resolve(__dirname, '..', '..','languages', 'languageParser'));
 
 class help {
-    constructor(Data) {
-        Commands = Data.Commands;
-        Configs = Data.Configs;
-        this.Desc = 'Shows info about a command and how to use it';
-        this.Usage = 'help [CommandName]';
-        this.NeedArguments = true;
+    constructor(data) {
+        this.commands = data.commands;
+        this.configs = data.configs;
+        this.description = 'Shows info about a command and how to use it';
+        this.usage = 'help [CommandName]';
+        this.needArgs = true;
+        this.languageFolderPath = data.languageFolderPath || path.resolve(__dirname, '..', '..', 'languages');
+
+        // Properties
+        this.LanguagerClient = new LanguagerClass({configs: this.configs});
+
+        // Ambient variables
+        this.languager = this.LanguagerClient.get;
     }
-    Main(Msg, language, args) {
-        return new Promise((resolve) => {
+    main(param) {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
             var description = '```css\n';
-            var CommandData;
-            var FoundedCommand = false;
-            Commands.forEach((Category) => {
-                Category.commands.forEach((Command) => {
-                    if (Command.name === args[0] || language.Commands[Command.name] === args[0]) {
-                        CommandData = Command;
-                        FoundedCommand = true;
+            var commandData;
+            var foundedCommand = false;
+
+            await fs.readdirSync(this.languageFolderPath).forEach(async languages => {
+                if (languages.endsWith('.json')) {
+                    var searchLanguage = await this.languager(languages.slice(0,-5));
+
+                    // verify if the testing language matches with the command
+                    var commandName = Object.values(searchLanguage.commandsCategory).indexOf(param[1].args[1]);
+                    if (commandName !== -1) {
+                        this.commands.forEach(category => {
+                            category.commands.forEach(command => {
+                                if (command.name === Object.keys(searchLanguage.commandsCategory)[commandName]) {
+                                    commandData = command;
+                                    foundedCommand = true;
+                                }
+                            });
+                        });
                     }
-                });
+                }
             });
-            if (!FoundedCommand) {
+            if (!foundedCommand) {
                 var LoadingMessage = new MessageEmbed()
-                    .setTitle(language.Errors.NotFounded + ' ' + args[0] + '!')
+                    .setTitle(param[1].language.errors.notFounded + ' ' + param[1].args[0] + '!')
                     .setColor('#FF5555')
-                    .setDescription(language.Errors.NotFounded + '.')
+                    .setDescription(param[1].language.errors.notFounded + '.')
                     .setThumbnail('attachment://error.gif')
                     .attachFiles([path.resolve(__dirname, '..','..','assets','images','error.gif')]);
-                Msg.channel.send(LoadingMessage);
+                param[0].channel.send(LoadingMessage);
                 resolve();
                 return;
             }
-            description += language.Message.HelpDesc + ': ' + CommandData.Desc + '\n';
-            description += language.Message.HelpUsage + ': [' + Configs.Prefixes + ']' + CommandData.Usage;
+            description += param[1].language.message.helpDesc + ': ' + commandData.description + '\n';
+            description += param[1].language.message.helpUsage + ': [' + this.configs.prefixes + ']' + commandData.usage;
             description += '```';
             LoadingMessage = new MessageEmbed()
-                .setTitle(language.Message.HelpAboutCommand + args[0] + ':')
+                .setTitle(param[1].language.message.helpAboutCommand + param[1].args[0] + ':')
                 .setColor('#9999FF')
                 .setDescription(description)
                 .setThumbnail('attachment://Terminal.png')
                 .attachFiles([path.resolve(__dirname, '..','..','assets','images','Terminal.png')]);
-            Msg.channel.send(LoadingMessage);
+            param[0].channel.send(LoadingMessage);
             resolve();
         });
     }

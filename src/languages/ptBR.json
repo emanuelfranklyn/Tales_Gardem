@@ -1,0 +1,36 @@
+{
+    "languageName": "Português",
+    "englishName": "Portuguese",
+    "errors": {
+        "notFounded": "Não foi encontrado"
+    },
+    "categorys": {
+        "uncategorized": "🧧 Não categorizado",
+        "admin": "🇲 Moderação",
+        "utils": "ℹ️ Utilitários"
+    },
+    "commandsCategory": {
+        "help": "ajuda",
+        "commands": "comandos",
+        "config": "configurar"
+    },
+    "message": {
+        "commandsEmbedTitle": "Lista de comandos:",
+        "waitingCommandLoad": "Aguardando o carregamento do commando...",
+        "waitingCommandLoadTooLong": "Tempo esgotado, Ainda aguardando o carregamento do commando...",
+        "helpAboutCommand": "Ajuda sobre o comando ",
+        "helpUsage": "Uso",
+        "helpDesc": "Descrição",
+        "listOfConfigs": "Lista de configurações",
+        "theConfigsList": "Utilize alguma das opções abaixo para configurar",
+        "listOfTopics": "Lista de topicos",
+        "theTopicsList": "Utilize algum dos topicos abaixo para definir",
+        "sucessfullRunnedCommand": "Comando executado com sucesso!",
+        "sucessfullRunnedCommandLong": "O comando foi executado com sucesso :)"
+    },
+    "commandWords": {
+        "config": {
+            "categories": "categorias"
+        }
+    }
+}

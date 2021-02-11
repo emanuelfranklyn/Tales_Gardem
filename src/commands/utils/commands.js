@@ -1,34 +1,33 @@
 const { MessageEmbed } = require('discord.js');
 const path = require('path');
-var Commands;
 
 class commands {
-    constructor(Data) {
-        Commands = Data.Commands;
-        this.Desc = 'Shows a list with all avaliable commands';
-        this.NeedArguments = false;
+    constructor(data) {
+        this.commands = data.commands;
+        this.description = 'Shows a list with all avaliable commands';
+        this.needArgs = false;
     }
 
-    Main(Msg, language) {
+    main(params) {
         return new Promise((resolve) => {
             var description = '```css\n';
-            Commands.forEach((Category) => {
-                description += '\n' + language.Categorys[Category.name] + ':\n';
-                if (Category.commands.length > 0) {
+            this.commands.forEach((category) => {
+                if (category.commands.length > 0) {
+                    description += '\n' + params[1].language.categorys[category.name] + ':\n';
                     description += '> ';
                 }
-                Category.commands.forEach((Command) => {
-                    description += '|' + Command.name + '| ';
+                category.commands.forEach((command) => {
+                    description += '|' + command.name + '| ';
                 });
             });
             description += '\n```';
             var LoadingMessage = new MessageEmbed()
-                .setTitle(language.Message.CommandsEmbedTitle)
+                .setTitle(params[1].language.message.commandsEmbedTitle)
                 .setColor('#99FF99')
                 .setDescription(description)
                 .setThumbnail('attachment://Terminal.png')
                 .attachFiles([path.resolve(__dirname, '..','..','assets','images','Terminal.png')]);
-            Msg.channel.send(LoadingMessage);
+            params[0].channel.send(LoadingMessage);
             resolve();
         });
     }

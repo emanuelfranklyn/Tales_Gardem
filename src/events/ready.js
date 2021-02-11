@@ -1,8 +1,8 @@
 class guildMemberAdd {
     constructor() {
     }
-    parser() {
-        console.log('Guild Member Add!');
+    run() {
+        console.log('ready');
     }
 }
 

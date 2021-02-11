@@ -1,0 +1,36 @@
+{
+    "languageName": "English",
+    "englishName": "English",
+    "errors": {
+        "notFounded": "Not Founded"
+    },
+    "categorys": {
+        "uncategorized": "🧧 uncategorized",
+        "admin": "🇲 Admin",
+        "utils": "ℹ️ Utils"
+    },
+    "commandsCategory": {
+        "help": "help",
+        "commands": "commands",
+        "config": "config"
+    },
+    "message": {
+        "commandsEmbedTitle": "List of commands:",
+        "waitingCommandLoad": "Waiting command load...",
+        "waitingCommandLoadTooLong": "Timeout, Still waiting command load...",
+        "helpAboutCommand": "Help about command ",
+        "helpUsage": "Usage",
+        "helpDesc": "Description",
+        "listOfConfigs": "List of configs",
+        "theConfigsList": "Use some of options below to config",
+        "listOfTopics": "List of topics",
+        "theTopicsList": "Use some of topics below to define",
+        "sucessfullRunnedCommand": "Command executed with sucess!",
+        "sucessfullRunnedCommandLong": "The command has been executed with sucess :)"
+    },
+    "commandWords": {
+        "config": {
+            "categories": "categories"
+        }
+    }
+}
