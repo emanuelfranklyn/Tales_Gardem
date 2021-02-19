@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js');
-const fs = require('fs');
 const path = require('path');
 const LanguagerClass = require(path.resolve(__dirname, '..','..','languages', 'languageParser'));
 
@@ -11,6 +10,7 @@ class config {
         this.needArgs = true;
         this.languagerClient = new LanguagerClass({configs: this.configs});
         this.languager = this.languagerClient.get;
+        this.getAllLanguages = this.languagerClient.getAllLanguages;
         this.configurableConfigs = {
             topics: [{
                 name: 'language',
@@ -19,11 +19,9 @@ class config {
                     needArguments: true,
                     run: async (Msg, _, args, database) => {
                         var allLangs = [];
-                        await fs.readdirSync(path.resolve(__dirname, '..', '..', 'languages')).forEach(async (languages) => {
-                            if (languages.endsWith('.json')) {
-                                var languageFileName = languages.slice(0, languages.length - 5);
-                                allLangs.push(languageFileName);
-                            }
+                        await this.getAllLanguages.forEach(async (languages) => {
+                            var languageFileName = languages.slice(0, languages.length - 5);
+                            allLangs.push(languageFileName);
                         });
                         if (allLangs.includes(args[3])) {
                             return Promise.resolve(database.Add('Guild' + Msg.guild.id, 'Language', args[3]));
@@ -34,11 +32,9 @@ class config {
                     },
                     fallback: async (Msg, language) => {
                         var allLangs = [];
-                        await fs.readdirSync(path.resolve(__dirname, '..', '..', 'languages')).forEach(async (languages) => {
-                            if (languages.endsWith('.json')) {
-                                var languageFileName = languages.slice(0, languages.length - 5);
-                                allLangs.push(languageFileName);
-                            }
+                        await this.getAllLanguages.forEach(async (languages) => {
+                            var languageFileName = languages.slice(0, languages.length - 5);
+                            allLangs.push(languageFileName);
                         });
                         var fallbackEMsg = new MessageEmbed()
                             .setTitle(language.message.listOfTopics + ':')
@@ -61,13 +57,11 @@ class config {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             var resolved = false;
-            await fs.readdirSync(path.resolve(__dirname, '..', '..', 'languages')).forEach(async (languages) => {
-                if (languages.endsWith('.json')) {
-                    var languageFileName = languages.slice(0, languages.length - 5);
-                    params[1].language = await this.languager(languageFileName);
-                    if (params[1].command.toString().toLowerCase() === params[1].language.commandWords.config.categories) {
-                        return resolved = languageFileName;
-                    }
+            await this.getAllLanguages.forEach(async (languages) => {
+                var languageFileName = languages.slice(0, languages.length - 5);
+                params[1].language = await this.languager(languageFileName);
+                if (params[1].command.toString().toLowerCase() === params[1].language.commandWords.config.categories) {
+                    return resolved = languageFileName;
                 }
             });
             if (!resolved) {params[1].language = await this.languager(this.configs.defaultLang);} else {params[1].language = await this.languager(resolved);}

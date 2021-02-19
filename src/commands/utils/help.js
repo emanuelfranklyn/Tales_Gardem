@@ -1,6 +1,5 @@
 const { MessageEmbed } = require('discord.js');
 const path = require('path');
-const fs = require('fs');
 const LanguagerClass = require(path.resolve(__dirname, '..', '..','languages', 'languageParser'));
 
 class help {
@@ -17,6 +16,7 @@ class help {
 
         // Ambient variables
         this.languager = this.LanguagerClient.get;
+        this.getAllLanguages = this.LanguagerClient.getAllLanguages;
     }
     main(param) {
         // eslint-disable-next-line no-async-promise-executor
@@ -25,22 +25,20 @@ class help {
             var commandData;
             var foundedCommand = false;
 
-            await fs.readdirSync(this.languageFolderPath).forEach(async languages => {
-                if (languages.endsWith('.json')) {
-                    var searchLanguage = await this.languager(languages.slice(0,-5));
+            await this.getAllLanguages.forEach(async languages => {
+                var searchLanguage = await this.languager(languages.slice(0,-5));
 
-                    // verify if the testing language matches with the command
-                    var commandName = Object.values(searchLanguage.commandsCategory).indexOf(param[1].args[1]);
-                    if (commandName !== -1) {
-                        this.commands.forEach(category => {
-                            category.commands.forEach(command => {
-                                if (command.name === Object.keys(searchLanguage.commandsCategory)[commandName]) {
-                                    commandData = command;
-                                    foundedCommand = true;
-                                }
-                            });
+                // verify if the testing language matches with the command
+                var commandName = Object.values(searchLanguage.commandsCategory).indexOf(param[1].args[1]);
+                if (commandName !== -1) {
+                    this.commands.forEach(category => {
+                        category.commands.forEach(command => {
+                            if (command.name === Object.keys(searchLanguage.commandsCategory)[commandName]) {
+                                commandData = command;
+                                foundedCommand = true;
+                            }
                         });
-                    }
+                    });
                 }
             });
             if (!foundedCommand) {

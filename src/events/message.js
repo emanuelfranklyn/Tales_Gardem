@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const LanguagerClass = require(path.resolve(__dirname, '..','languages', 'languageParser'));
 const { MessageEmbed } = require('discord.js');
 const { reactionI } = require('../utils');
@@ -19,6 +18,7 @@ class message {
 
         // Ambient variables
         this.languager = this.LanguagerClient.get;
+        this.getAllLanguages = this.LanguagerClient.getAllLanguages;
     }
 
     exceptionCatcher(error, message) {
@@ -42,15 +42,13 @@ class message {
 
         command = msgWNP.split(' ')[0];
 
-        await fs.readdirSync(this.languageFolderPath).forEach(async languages => {
-            if (languages.endsWith('.json')) {
-                var searchLanguage = await this.languager(languages.slice(0,-5));
+        await this.getAllLanguages().forEach(async languages => {
+            var searchLanguage = await this.languager(languages.slice(0,-5));
 
-                // verify if the testing language matches with the command
-                var commandName = Object.values(searchLanguage.commandsCategory).indexOf(command);
-                if (commandName !== -1) {
-                    mathedLanguages.push(languages.slice(0, -5));
-                }
+            // verify if the testing language matches with the command
+            var commandName = Object.values(searchLanguage.commandsCategory).indexOf(command);
+            if (commandName !== -1) {
+                mathedLanguages.push(languages.slice(0, -5));
             }
         });
 

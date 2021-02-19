@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 var defaultLang;
 
 class languageParser {
@@ -12,6 +13,9 @@ class languageParser {
         } catch (e) {
             return require(path.resolve(__dirname, defaultLang + '.json'));
         }
+    }
+    getAllLanguages() {
+        return fs.readdirSync(path.resolve(__dirname)).filter(Language => Language.endsWith('.json'));
     }
 }
 
