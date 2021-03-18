@@ -1,4 +1,4 @@
-class guildMemberAdd {
+class ready {
     constructor() {
     }
     run() {
@@ -6,4 +6,4 @@ class guildMemberAdd {
     }
 }
 
-module.exports = guildMemberAdd;
+module.exports = ready;
