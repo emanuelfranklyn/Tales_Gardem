@@ -132,7 +132,7 @@ class message {
         this.commands.forEach(category => {
             category.commands.forEach((command) => {
                 if (command.name === msg.command) {
-                    if (command.needArguments && msg.args[1]) {
+                    if ((command.needArguments && msg.args[1]) || (!command.needArguments)) {
                         command.startFunction(message, msg).catch((e) => {
                             this.exceptionCatcher(e, message);
                         });

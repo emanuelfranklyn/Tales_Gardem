@@ -19,9 +19,9 @@ class config {
                     needArguments: true,
                     run: async (Msg, _, args, database) => {
                         var allLangs = [];
-                        await this.getAllLanguages.forEach(async (languages) => {
+                        await this.getAllLanguages().forEach(async (languages) => {
                             var languageFileName = languages.slice(0, languages.length - 5);
-                            allLangs.push(languageFileName);
+                            allLangs.push(languageFileName.toString().toLowerCase());
                         });
                         if (allLangs.includes(args[3])) {
                             return Promise.resolve(database.Add('Guild' + Msg.guild.id, 'Language', args[3]));
@@ -32,7 +32,7 @@ class config {
                     },
                     fallback: async (Msg, language) => {
                         var allLangs = [];
-                        await this.getAllLanguages.forEach(async (languages) => {
+                        await this.getAllLanguages().forEach(async (languages) => {
                             var languageFileName = languages.slice(0, languages.length - 5);
                             allLangs.push(languageFileName);
                         });
@@ -57,7 +57,7 @@ class config {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             var resolved = false;
-            await this.getAllLanguages.forEach(async (languages) => {
+            await this.getAllLanguages().forEach(async (languages) => {
                 var languageFileName = languages.slice(0, languages.length - 5);
                 params[1].language = await this.languager(languageFileName);
                 if (params[1].command.toString().toLowerCase() === params[1].language.commandWords.config.categories) {

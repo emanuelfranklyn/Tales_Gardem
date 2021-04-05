@@ -25,7 +25,7 @@ class help {
             var commandData;
             var foundedCommand = false;
 
-            await this.getAllLanguages.forEach(async languages => {
+            await this.getAllLanguages().forEach(async languages => {
                 var searchLanguage = await this.languager(languages.slice(0,-5));
 
                 // verify if the testing language matches with the command
