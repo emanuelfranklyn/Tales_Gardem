@@ -12,7 +12,8 @@
     "commandsCategory": {
         "help": "help",
         "commands": "commands",
-        "config": "config"
+        "config": "config",
+        "ping": "ping"
     },
     "message": {
         "commandsEmbedTitle": "List of commands:",
@@ -26,7 +27,9 @@
         "listOfTopics": "List of topics",
         "theTopicsList": "Use some of topics below to define",
         "sucessfullRunnedCommand": "Command executed with sucess!",
-        "sucessfullRunnedCommandLong": "The command has been executed with sucess :)"
+        "sucessfullRunnedCommandLong": "The command has been executed with sucess :)",
+        "pingTitle": "Pong! :ping_pong:",
+        "pingDescription": "My actual ping its: "
     },
     "commandWords": {
         "config": {

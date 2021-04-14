@@ -140,6 +140,7 @@ class message {
                         this.commands.forEach(category => {
                             category.commands.forEach((command) => {
                                 if (command.name === this.configs.defaultCommand) {
+                                    if (category.name === 'admin' && message.member.roles.find(role => role.hasPermission('Administrator'))) {return;}
                                     msg.args[1] = msg.command;
                                     command.startFunction(message, msg);
                                 }

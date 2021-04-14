@@ -12,7 +12,8 @@
     "commandsCategory": {
         "help": "ajuda",
         "commands": "comandos",
-        "config": "configurar"
+        "config": "configurar",
+        "ping": "ping"
     },
     "message": {
         "commandsEmbedTitle": "Lista de comandos:",
@@ -26,7 +27,9 @@
         "listOfTopics": "Lista de topicos",
         "theTopicsList": "Utilize algum dos topicos abaixo para definir",
         "sucessfullRunnedCommand": "Comando executado com sucesso!",
-        "sucessfullRunnedCommandLong": "O comando foi executado com sucesso :)"
+        "sucessfullRunnedCommandLong": "O comando foi executado com sucesso :)",
+        "pingTitle": "Pong! :ping_pong:",
+        "pingDescription": "Meu ping atual é: "
     },
     "commandWords": {
         "config": {

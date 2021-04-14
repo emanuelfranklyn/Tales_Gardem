@@ -3,7 +3,9 @@ const Mysql = require('mysql.js');
 const { ShardingManager } = require('discord.js');
 const configs = require('./Configs.json');
 
-Node_Env === 'production' ? false : configs.Prefixes = configs.DevPrefixes;
+if (Node_Env !== 'production') {
+    configs.prefixes = configs.devPrefixes;
+}
 
 var DataBase = new Mysql.Client({
     Debug: Node_Env !== 'production',
